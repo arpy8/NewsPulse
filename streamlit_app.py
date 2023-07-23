@@ -43,8 +43,8 @@ class NewsAPIConnection(ExperimentalBaseConnection):
         if response.status_code == 200:
             return response.json()['articles']
         else:
-            st.error("Failed to fetch news data.")
-            return None
+            st.error(f"Error {response.status_code}, Failed to fetch news data.")
+            return None, response.status_code
 
 
 # Initialize Streamlit page layout
@@ -62,7 +62,8 @@ st.write(hide_streamlit_style, unsafe_allow_html=True)
 # Sidebar layout
 with st.sidebar:
     st.write("<h1 style='text-align:center; font-size:7vh; padding-bottom:10vh'>"
-             "News<span style='color:red'>Pulse</span></h1>", unsafe_allow_html=True)
+             "News<span style='color:red'>Pulse</span></h1>"
+             "Get the latest scoop in just a few clicks!", unsafe_allow_html=True)
 
     # Sidebar options
     category = st.selectbox('Category',
@@ -111,3 +112,6 @@ try:
             """, unsafe_allow_html=True)
 except requests.exceptions.RequestException:
     st.error("Failed to fetch news data. Please check your internet connection.")
+
+except TypeError:
+    pass
