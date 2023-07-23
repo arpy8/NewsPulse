@@ -37,7 +37,6 @@ class NewsAPIConnection(ExperimentalBaseConnection):
     def cursor(self):
         return self.session
 
-    # @st.cache_data()
     def query(self):
         response = self.session.get(BASE_URL, params=parameters)
         if response.status_code == 200:
