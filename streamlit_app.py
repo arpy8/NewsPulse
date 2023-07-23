@@ -1,34 +1,30 @@
 import os
 import requests
-import webbrowser
 import streamlit as st
 from streamlit.connections import ExperimentalBaseConnection
 from streamlit.runtime.media_file_storage import MediaFileStorageError
 
-# ✅ 1. _connect()
-# ✅ 2.  query()
-# ✅ 3. cursor()
-# ✅ 4. @st.cache_data
-
-
 # Constants
-# API_KEY = os.getenv("NEWS_API")
-API_KEY = st.secrets["NEWS_API"]
+API_KEY = os.getenv("NEWS_API")
 BASE_URL = 'https://newsapi.org/v2/everything'
-DEFAULT_PAGE_SIZE = 15
+DEFAULT_PAGE_SIZE = 10
 
-parameters = {
-    'apiKey': API_KEY,
-    'q': "everything",
-    'language': "en",
-    'pageSize': DEFAULT_PAGE_SIZE
+# Mapping of language names to codes
+LANGUAGE_DICT = {
+    "English": "en",
+    "Arabic": "ar",
+    "German": "de",
+    "Spanish": "es",
+    "French": "fr",
+    "Hebrew": "he",
+    "Italian": "it",
+    "Dutch": "nl",
+    "Norwegian": "no",
+    "Portuguese": "pt",
+    "Russian": "ru",
+    "Swedish": "sv",
+    "Chinese": "zh"
 }
-
-# Links
-GITHUB = 'https://www.github.com/arpy8'
-LINKEDIN = 'https://www.linkedin.com/in/arpitsengar'
-WEBSITE = 'https://arpy8.github.io/'
-REPO = 'https://github.com/arpy8/Streamlit_Connection_Hackathon'
 
 
 # News API connection class
@@ -42,9 +38,8 @@ class NewsAPIConnection(ExperimentalBaseConnection):
     def cursor(self):
         return self.session
 
-    @st.cache_data()
-    def query(_self):
-        response = _self.session.get(BASE_URL, params=parameters)
+    def query(self):
+        response = self.session.get(BASE_URL, params=parameters)
         if response.status_code == 200:
             return response.json()['articles']
         else:
@@ -53,7 +48,7 @@ class NewsAPIConnection(ExperimentalBaseConnection):
 
 
 # Initialize Streamlit page layout
-st.set_page_config(page_title="NewsPulse", page_icon=":earth_asia:", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="NewsPulse", page_icon=":earth_asia:", initial_sidebar_state="expanded")
 
 # CSS style to hide Streamlit footer and menu
 hide_streamlit_style = """
@@ -66,23 +61,37 @@ st.write(hide_streamlit_style, unsafe_allow_html=True)
 
 # Sidebar layout
 with st.sidebar:
-    st.write("<h1 style='text-align:center; font-size:7vh; padding-bottom:0vh'>"
+    st.write("<h1 style='text-align:center; font-size:7vh; padding-bottom:10vh'>"
              "News<span style='color:red'>Pulse</span></h1>", unsafe_allow_html=True)
-    st.write("<p style='text-align:center; padding-bottom:10vh; color:grey;'>Get the latest scoop in just a few "
-             "clicks!</p>"
-             "",
-             unsafe_allow_html=True)
 
-# Main content layout
+    # Sidebar options
+    category = st.selectbox('Category',
+                            ("General", "Entertainment", "Technology", "Business", "Health", "Sports", "Science"))
+    sort_by = st.selectbox('Sort by', ("Relevancy", "Popularity", "PublishedAt"))
+    language = st.selectbox('Language', list(LANGUAGE_DICT.keys()))
+    page_number = st.number_input('Page Size', min_value=1, max_value=50, value=DEFAULT_PAGE_SIZE,
+                                  help="Changes the number of articles per page")
+
+    # Update parameters based on selected options
+    parameters = {
+        'apiKey': API_KEY,
+        'q': category.lower(),
+        'language': LANGUAGE_DICT[language],
+        'pageSize': page_number,
+        'sortBy': sort_by.lower() if sort_by else None
+    }
+
 st.write(f"""
-    <div style='padding:8vh 0 14vh 0'>
+    <div style='padding:8vh 0 10vh 0'>
     <hr><hr>
-    <h1 style='text-align:center; font-size:15vh; padding:5vh 0 6vh 0'>
+    <h1 style='text-align:center; font-size:15vh; padding:2vh 0 2vh 0'>
     News<span style='color:red'>Pulse</span></h1>
     <hr><hr>
     </div>
-    <p style='text-align:center;padding-bottom:4vh;color:#262730;font-size:8vh;'>⮟</p>
+    <h1 style='text-align:center;color:grey;'>{category} News</h1>
+    <p style='text-align:center;padding:0vh 0 4vh 0;color:#262730;font-size:8vh;'>⮟</p>
     """, unsafe_allow_html=True)
+# Main content layout
 
 # News generator
 connection = NewsAPIConnection("News API Connection")
@@ -93,7 +102,7 @@ try:
             if random_news["urlToImage"] is not None:
                 st.image(f'{random_news["urlToImage"]}')
         except MediaFileStorageError:
-            st.image(f'assets/general.png')
+            st.image(f'assets/{category}.png')
         st.write(f"""
             <h5>{random_news['description']}</h5>
             Link : <a href="{random_news['url']}">{random_news['url'][:80]}...</a><br>
