@@ -73,19 +73,6 @@ with st.sidebar:
              "",
              unsafe_allow_html=True)
 
-    if st.button('&#12644;&#12644;&#12644;&#12644;&#12644;&#12644;&#12644;'
-                 'Repository&#12644;&#12644;&#12644;&#12644;&#12644;'):
-        webbrowser.open_new_tab(REPO)
-    if st.button('&#12644;&#12644;&#12644;&#12644;&#12644;&#12644;&#12644;'
-                 'LinkedIn&#12644;&#12644;&#12644;&#12644;&#12644;&#12644;'):
-        webbrowser.open_new_tab(LINKEDIN)
-    if st.button('&#12644;&#12644;&#12644;&#12644;&#12644;&#12644;&#12644;'
-                 'Website&#12644;&#12644;&#12644;&#12644;&#12644;&#12644;'):
-        webbrowser.open_new_tab(WEBSITE)
-    if st.button('&#12644;&#12644;&#12644;&#12644;&#12644;&#12644;&#12644;'
-                 'Github&#12644;&#12644;&#12644;&#12644;&#12644;&#12644;&#12644;'):
-        webbrowser.open_new_tab(GITHUB)
-
 # Main content layout
 st.write(f"""
     <div style='padding:8vh 0 14vh 0'>
