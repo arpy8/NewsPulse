@@ -1,7 +1,6 @@
 import os
-import webbrowser
-
 import requests
+import webbrowser
 import streamlit as st
 from streamlit.connections import ExperimentalBaseConnection
 from streamlit.runtime.media_file_storage import MediaFileStorageError
@@ -13,8 +12,8 @@ from streamlit.runtime.media_file_storage import MediaFileStorageError
 
 
 # Constants
-API_KEY = os.getenv("NEWS_API")
-# API_KEY = st.secrets["NEWS_API"]
+# API_KEY = os.getenv("NEWS_API")
+API_KEY = st.secrets["NEWS_API"]
 BASE_URL = 'https://newsapi.org/v2/everything'
 DEFAULT_PAGE_SIZE = 15
 
