@@ -1,4 +1,6 @@
 import os
+import webbrowser
+
 import requests
 import streamlit as st
 from streamlit.connections import ExperimentalBaseConnection
@@ -11,7 +13,8 @@ from streamlit.runtime.media_file_storage import MediaFileStorageError
 
 
 # Constants
-API_KEY = st.secrets["NEWS_API"]
+API_KEY = os.getenv("NEWS_API")
+# API_KEY = st.secrets["NEWS_API"]
 BASE_URL = 'https://newsapi.org/v2/everything'
 DEFAULT_PAGE_SIZE = 15
 
@@ -21,6 +24,12 @@ parameters = {
     'language': "en",
     'pageSize': DEFAULT_PAGE_SIZE
 }
+
+# Links
+GITHUB = 'https://www.github.com/arpy8'
+LINKEDIN = 'https://www.linkedin.com/in/arpitsengar'
+WEBSITE = 'https://arpy8.github.io/'
+REPO = 'https://github.com/arpy8/Streamlit_Connection_Hackathon'
 
 
 # News API connection class
@@ -45,7 +54,7 @@ class NewsAPIConnection(ExperimentalBaseConnection):
 
 
 # Initialize Streamlit page layout
-st.set_page_config(page_title="NewsPulse", page_icon=":earth_asia:", initial_sidebar_state="expanded")
+st.set_page_config(page_title="NewsPulse", page_icon=":earth_asia:", initial_sidebar_state="collapsed")
 
 # CSS style to hide Streamlit footer and menu
 hide_streamlit_style = """
@@ -58,11 +67,25 @@ st.write(hide_streamlit_style, unsafe_allow_html=True)
 
 # Sidebar layout
 with st.sidebar:
-    st.write("<h1 style='text-align:center; font-size:7vh; padding-bottom:1vh'>"
+    st.write("<h1 style='text-align:center; font-size:7vh; padding-bottom:0vh'>"
              "News<span style='color:red'>Pulse</span></h1>", unsafe_allow_html=True)
-    st.write("<p style='text-align:center; color:grey;'>Made using NEWS API by <a "
-             "href='https://github.com/arpy8'>arpy8</a></p>",
+    st.write("<p style='text-align:center; padding-bottom:10vh; color:grey;'>Get the latest scoop in just a few "
+             "clicks!</p>"
+             "",
              unsafe_allow_html=True)
+
+    if st.button('&#12644;&#12644;&#12644;&#12644;&#12644;&#12644;&#12644;'
+                 'Repository&#12644;&#12644;&#12644;&#12644;&#12644;'):
+        webbrowser.open_new_tab(REPO)
+    if st.button('&#12644;&#12644;&#12644;&#12644;&#12644;&#12644;&#12644;'
+                 'LinkedIn&#12644;&#12644;&#12644;&#12644;&#12644;&#12644;'):
+        webbrowser.open_new_tab(LINKEDIN)
+    if st.button('&#12644;&#12644;&#12644;&#12644;&#12644;&#12644;&#12644;'
+                 'Website&#12644;&#12644;&#12644;&#12644;&#12644;&#12644;'):
+        webbrowser.open_new_tab(WEBSITE)
+    if st.button('&#12644;&#12644;&#12644;&#12644;&#12644;&#12644;&#12644;'
+                 'Github&#12644;&#12644;&#12644;&#12644;&#12644;&#12644;&#12644;'):
+        webbrowser.open_new_tab(GITHUB)
 
 # Main content layout
 st.write(f"""
