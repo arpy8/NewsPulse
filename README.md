@@ -1,5 +1,7 @@
 # **NewsPulse**
 
+#### [Web App Link](https://newspulse.streamlit.app/) 
+
 ## Description of the app
 
 The connector's purpose is to connect the Streamlit web application with the News API, allowing users to retrieve and view news articles based on various parameters such as category, sort order, language, and page size.
